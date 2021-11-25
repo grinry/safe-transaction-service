@@ -223,6 +223,14 @@ MASTER_COPIES: Dict[EthereumNetwork, List[Tuple[str, int, str]]] = {
         ("0xfb1bffC9d739B8D520DaF37dF666da4C687191EA", 173749, "1.3.0+L2"),
         ("0x69f4D1788e39c87893C980c06EdF4b7f686e2938", 173751, "1.3.0"),
     ],
+    EthereumNetwork.RSK: [
+        ('0xC6cFa90Ff601D6AAC45D8dcF194cf38B91aCa368', 3570859, '1.2.0'),
+        ('0xe502b44b0f3981f883e03dfa1dff119753178b40', 2641655, '1.1.1'),
+    ],
+    EthereumNetwork.RSK_TESTNET: [
+        ('0xd9Db270c1B5E3Bd161E8c8503c55cEABeE709552', 2362236, '1.3.0'),
+        ('0x3E5c63644E683549055b9Be8653de26E0B4CD36E', 2362236, '1.3.0+L2'),
+    ],
 }
 
 PROXY_FACTORIES: Dict[EthereumNetwork, List[Tuple[str, int]]] = {
@@ -301,6 +309,13 @@ PROXY_FACTORIES: Dict[EthereumNetwork, List[Tuple[str, int]]] = {
     EthereumNetwork.OPTIMISTIC: [
         ("0xC22834581EbC8527d974F8a1c97E1bEA4EF910BC", 173709),  # v1.3.0
     ],
+    EthereumNetwork.RSK: [
+        ('0x4b1Af52EA200BAEbF79450DBC996573A7b75f65A', 3570865), # v1.2.0
+        ('0xe8e29a03eb550a50a9fc199cb8ac6b9d22ec55c5', 2641646), # v1.1.0
+    ],
+    EthereumNetwork.RSK_TESTNET: [
+        ('0x4e59b44847B379578588920CA78fBF26C0b4956C', 2362236), # v1.3.0
+    ],
 }
 
 
@@ -341,11 +356,15 @@ class Command(BaseCommand):
             )
             self._setup_safe_proxy_factories(PROXY_FACTORIES[ethereum_network])
 
+        self.stdout.write(
+            self.style.WARNING("!!!!!!!!!!!!!! {ethereum_network.name}")
+        )
+
         if not (
             ethereum_network in MASTER_COPIES and ethereum_network in PROXY_FACTORIES
         ):
             self.stdout.write(
-                self.style.WARNING("Cannot detect a valid ethereum-network")
+                self.style.WARNING("Cannot detect a valid ethereum-network {ethereum_network.name}!")
             )
 
     def _setup_safe_master_copies(
